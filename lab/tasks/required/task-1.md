@@ -6,11 +6,11 @@
 
 <h4>Purpose</h4>
 
-Build an ETL pipeline that fetches data from an external API and loads it into the database, handling pagination, incremental sync, and idempotent upserts.
+Build an ETL pipeline that fetches data from an external API and loads it into the database.
 
 <h4>Context</h4>
 
-The database starts empty. The autochecker dashboard API provides anonymized check results for all students across all labs. Your job is to build a pipeline that fetches this data and populates the local database so the system can serve it through existing endpoints and power analytics in the next task.
+The database starts empty. We can get anonymized data on task completions in Autochecker API. Your job is to build a pipeline that fetches this data and populates your database so the system can serve it through existing endpoints to display as analytics.
 
 <h4>Table of contents</h4>
 
