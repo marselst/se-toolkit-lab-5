@@ -16,7 +16,7 @@ from app.settings import settings
 
 
 # ---------------------------------------------------------------------------
-# Extract — fetch data from the autochecker API11111111111
+# Extract — fetch data from the autochecker API111111111111111
 # ---------------------------------------------------------------------------
 
 
