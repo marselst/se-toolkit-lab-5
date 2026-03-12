@@ -59,3 +59,75 @@ tr:nth-child(even) {
   padding: 0.25rem 0.75rem;
   font-size: 0.85rem;
 }
+
+/* Dashboard */
+
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+}
+
+.lab-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lab-selector select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+}
+
+.chart-section,
+.table-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-section h2,
+.table-section h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.loading,
+.error {
+  padding: 1rem;
+  text-align: center;
+}
+
+.error {
+  color: #d32f2f;
+  background: #ffebee;
+  border-radius: 4px;
+}
+
+.table-section table {
+  width: 100%;
+}
+
+.table-section th,
+.table-section td {
+  padding: 0.75rem 1rem;
+}
