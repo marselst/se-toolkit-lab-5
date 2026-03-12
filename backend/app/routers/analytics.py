@@ -23,7 +23,6 @@ async def get_scores(
     session: AsyncSession = Depends(get_session),
 ):
     """Score distribution histogram for a given lab."""
-    # Find the lab item by title (e.g., "lab-04" → "Lab 04")
     lab_title = lab.replace("-", " ").title()
     lab_stmt = select(ItemRecord.id).where(
         ItemRecord.type == "lab",
@@ -41,7 +40,6 @@ async def get_scores(
             {"bucket": "76-100", "count": 0},
         ]
 
-    # Find all tasks belonging to this lab
     task_stmt = select(ItemRecord.id).where(
         ItemRecord.type == "task",
         ItemRecord.parent_id == lab_id
@@ -57,7 +55,6 @@ async def get_scores(
             {"bucket": "76-100", "count": 0},
         ]
 
-    # Build score bucket CASE expression
     score_bucket = case(
         (InteractionLog.score <= 25, "0-25"),
         (InteractionLog.score <= 50, "26-50"),
@@ -65,7 +62,6 @@ async def get_scores(
         else_="76-100",
     ).label("bucket")
 
-    # Query interactions with scores for these tasks
     stmt = select(
         score_bucket,
         func.count().label("count")
@@ -77,7 +73,6 @@ async def get_scores(
     result = await session.exec(stmt)
     bucket_counts = {row.bucket: row.count for row in result.all()}
 
-    # Return all four buckets
     return [
         {"bucket": "0-25", "count": bucket_counts.get("0-25", 0)},
         {"bucket": "26-50", "count": bucket_counts.get("26-50", 0)},
@@ -92,7 +87,6 @@ async def get_pass_rates(
     session: AsyncSession = Depends(get_session),
 ):
     """Per-task pass rates for a given lab."""
-    # Find the lab item by title
     lab_title = lab.replace("-", " ").title()
     lab_stmt = select(ItemRecord.id).where(
         ItemRecord.type == "lab",
@@ -105,7 +99,6 @@ async def get_pass_rates(
     if lab_id is None:
         return []
 
-    # Find all tasks belonging to this lab
     task_stmt = select(ItemRecord.id, ItemRecord.title).where(
         ItemRecord.type == "task",
         ItemRecord.parent_id == lab_id
@@ -115,7 +108,6 @@ async def get_pass_rates(
 
     result = []
     for task_id, task_title in tasks:
-        # Get avg_score and attempts for this task
         stmt = select(
             func.avg(InteractionLog.score).label("avg_score"),
             func.count().label("attempts")
@@ -144,7 +136,6 @@ async def get_timeline(
     session: AsyncSession = Depends(get_session),
 ):
     """Submissions per day for a given lab."""
-    # Find the lab item by title
     lab_title = lab.replace("-", " ").title()
     lab_stmt = select(ItemRecord.id).where(
         ItemRecord.type == "lab",
@@ -157,7 +148,6 @@ async def get_timeline(
     if lab_id is None:
         return []
 
-    # Find all tasks belonging to this lab
     task_stmt = select(ItemRecord.id).where(
         ItemRecord.type == "task",
         ItemRecord.parent_id == lab_id
@@ -168,7 +158,6 @@ async def get_timeline(
     if not task_ids:
         return []
 
-    # Group interactions by date
     stmt = select(
         func.date(InteractionLog.created_at).label("date"),
         func.count().label("submissions")
@@ -193,7 +182,6 @@ async def get_groups(
     session: AsyncSession = Depends(get_session),
 ):
     """Per-group performance for a given lab."""
-    # Find the lab item by title
     lab_title = lab.replace("-", " ").title()
     lab_stmt = select(ItemRecord.id).where(
         ItemRecord.type == "lab",
@@ -206,7 +194,6 @@ async def get_groups(
     if lab_id is None:
         return []
 
-    # Find all tasks belonging to this lab
     task_stmt = select(ItemRecord.id).where(
         ItemRecord.type == "task",
         ItemRecord.parent_id == lab_id
@@ -217,7 +204,6 @@ async def get_groups(
     if not task_ids:
         return []
 
-    # Join interactions with learners and group by student_group
     stmt = select(
         Learner.student_group.label("group"),
         func.avg(InteractionLog.score).label("avg_score"),
