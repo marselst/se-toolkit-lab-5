@@ -1,5 +1,6 @@
 import { useState, useEffect, useReducer, FormEvent } from 'react'
 import './App.css'
+import Dashboard from './Dashboard'
 
 const STORAGE_KEY = 'api_key'
 
@@ -38,6 +39,7 @@ function App() {
   )
   const [draft, setDraft] = useState('')
   const [fetchState, dispatch] = useReducer(fetchReducer, { status: 'idle' })
+  const [showDashboard, setShowDashboard] = useState(false)
 
   useEffect(() => {
     if (!token) return
@@ -69,6 +71,7 @@ function App() {
     localStorage.removeItem(STORAGE_KEY)
     setToken('')
     setDraft('')
+    setShowDashboard(false)
   }
 
   if (!token) {
@@ -87,13 +90,37 @@ function App() {
     )
   }
 
+  if (showDashboard) {
+    return (
+      <div>
+        <header className="app-header">
+          <h1>Dashboard</h1>
+          <div>
+            <button onClick={() => setShowDashboard(false)}>
+              Back to Items
+            </button>
+            <button className="btn-disconnect" onClick={handleDisconnect}>
+              Disconnect
+            </button>
+          </div>
+        </header>
+        <Dashboard />
+      </div>
+    )
+  }
+
   return (
     <div>
       <header className="app-header">
         <h1>Items</h1>
-        <button className="btn-disconnect" onClick={handleDisconnect}>
-          Disconnect
-        </button>
+        <div>
+          <button onClick={() => setShowDashboard(true)}>
+            View Dashboard
+          </button>
+          <button className="btn-disconnect" onClick={handleDisconnect}>
+            Disconnect
+          </button>
+        </div>
       </header>
 
       {fetchState.status === 'loading' && <p>Loading...</p>}
